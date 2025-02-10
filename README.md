@@ -89,6 +89,7 @@ MINIO_ROOT_PASSWORD=12345678
 
 ## Directory Structure:
 
+```bash
 .
 ├── backend/
 │   ├── Dockerfile
@@ -103,6 +104,7 @@ MINIO_ROOT_PASSWORD=12345678
 │   ├── testdata/
 ├── docker-compose.yml
 └── README.md
+```
 
 backend/: Contains the FastAPI backend code
 frontend/: Contains the Next.js frontend code
