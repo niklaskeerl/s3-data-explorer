@@ -1,0 +1,60 @@
+services:
+  frontend:
+    hostname: frontend
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - BACKEND_BASE_URL=http://backend:5002/
+    ports:
+      - "3000:3000"
+  backend:
+    hostname: backend
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - AWS_ENDPOINT_URL=http://s3:9000
+      - S3_BUCKET=satellite-data
+      - AWS_ACCESS_KEY_ID=QrLDkWufDTHARwOi0goi
+      - AWS_SECRET_ACCESS_KEY=DbvJWi1xKPcLSGMc8kKQc3kKoXwqeOWSMIoKFJCE
+    ports:
+      - "5002:5002"
+    depends_on:
+      s3-initialize:
+        condition: service_completed_successfully
+  s3-initialize:
+    hostname: s3-initialize
+    container_name: s3-initialize
+    image: quay.io/minio/mc
+    environment:
+      - AWS_ENDPOINT_URL=http://s3:9000
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=12345678
+      - AWS_ACCESS_KEY_ID=QrLDkWufDTHARwOi0goi
+      - AWS_SECRET_ACCESS_KEY=DbvJWi1xKPcLSGMc8kKQc3kKoXwqeOWSMIoKFJCE
+      - S3_BUCKET=satellite-data
+    volumes:
+      - ./s3-initialize:/tmp
+    entrypoint: ["/bin/sh", "/tmp/initialize.sh"]
+    depends_on:
+      s3:
+        condition: service_healthy
+  s3:
+    hostname: s3
+    container_name: s3
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=12345678
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
