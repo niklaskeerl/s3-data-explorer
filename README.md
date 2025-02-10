@@ -41,8 +41,8 @@ To run the project, use Docker Compose. It will set up all necessary containers 
 Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/niklaskeerl/s3-data-explorer
+cd s3-data-explorer
 ```
 
 Build and start the containers using Docker Compose:
@@ -68,51 +68,13 @@ This will start the following services:
 MinIO is running as the S3-compatible service:
 
 S3 Console: Access the MinIO web UI at http://localhost:9001 using the following credentials:
-Username: admin
-Password: 12345678
-
-## Environment Variables
-
-Several environment variables need to be configured for the backend and S3 service. These are defined within the docker-compose.yml file.
-
-Backend:
-
-AWS_ENDPOINT_URL=http://s3:9000
-S3_BUCKET=satellite-data
-AWS_ACCESS_KEY_ID=QrLDkWufDTHARwOi0goi
-AWS_SECRET_ACCESS_KEY=DbvJWi1xKPcLSGMc8kKQc3kKoXwqeOWSMIoKFJCE
-
-S3 (MinIO):
-
-MINIO_ROOT_USER=admin
-MINIO_ROOT_PASSWORD=12345678
-
-## Directory Structure:
-
-```bash
-.
-├── backend/
-│   ├── Dockerfile
-│   ├── app/
-│   └── ...
-├── frontend/
-│   ├── Dockerfile
-│   ├── src/
-│   └── ...
-├── s3-initialize/
-│   ├── initialize.sh
-│   ├── testdata/
-├── docker-compose.yml
-└── README.md
-```
-
-backend/: Contains the FastAPI backend code
-frontend/: Contains the Next.js frontend code
-s3-initialize/: Holds the script (initialize.sh) to initialize the MinIO S3 bucket with data
-docker-compose.yml: Configuration file to set up the Docker containers
+- Username: admin
+- Password: 12345678
 
 ## Licenses
 
 The testdata uses an image from Pierre Markuse from Hamm, Germany. It is licensed under CC BY 2.0.
+
 Image: https://commons.wikimedia.org/wiki/File:Hurricane_Larry_in_the_Atlantic_Ocean_-_September_8th,_2021_(51440099966).jpg
+
 License text: https://creativecommons.org/licenses/by/2.0
